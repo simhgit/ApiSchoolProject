@@ -63,6 +63,8 @@ curl_setopt_array($curl, [
         "Content-Type: application/json",
         "OpenAI-Beta: assistants=v1"
     ],
+    CURLOPT_SSL_VERIFYPEER => false // Disable SSL verification
+
 ]);
 
 // Exécution de la requête cURL
@@ -98,6 +100,7 @@ curl_setopt_array($curl, [
         "Content-Type: application/json",
         "OpenAI-Beta: assistants=v1"
     ],
+                  CURLOPT_SSL_VERIFYPEER => false // Disable SSL verification
 ]);
 
 $response = curl_exec($curl);
@@ -127,6 +130,7 @@ curl_setopt_array($curl, [
         "Content-Type: application/json",
         "OpenAI-Beta: assistants=v1"
     ],
+                  CURLOPT_SSL_VERIFYPEER => false // Disable SSL verification
 ]);
 
 $response = curl_exec($curl);
