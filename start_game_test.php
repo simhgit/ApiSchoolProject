@@ -507,7 +507,7 @@ if ($err) {
                 <?php echo $choix2; ?>
             </button>
             <button class="choice-button"
-                onclick="sendChoiceRequestAndHideElements('<?php echo $threadId; ?>', '<?php echo $choix3; ?>')">
+                onclick="sendChoiceRequestAndHideElements('<?php echo $threadId; ?>', '3')">
                 <?php echo $choix3; ?>
             </button>
         </div>
