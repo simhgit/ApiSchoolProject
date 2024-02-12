@@ -81,8 +81,108 @@ if ($getOpenAIKeyStatement->execute()) {
 <?php
 
 
+$threadId = ''; // Variable pour stocker l'ID du thread
+
+$curl = curl_init();
+
+curl_setopt_array($curl, [
+    CURLOPT_URL => "https://api.openai.com/v1/threads?=",
+    CURLOPT_RETURNTRANSFER => true,
+    CURLOPT_ENCODING => "",
+    CURLOPT_MAXREDIRS => 10,
+    CURLOPT_TIMEOUT => 30,
+    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+    CURLOPT_CUSTOMREQUEST => "POST",
+    CURLOPT_POSTFIELDS => "",
+    CURLOPT_HTTPHEADER => [
+        "Authorization: Bearer $newOpenAIKey",
+        "Content-Type: application/json",
+        "OpenAI-Beta: assistants=v1"
+    ],
+                  CURLOPT_SSL_VERIFYPEER => false // Disable SSL verification
+]);
+
+$response = curl_exec($curl);
+$err = curl_error($curl);
+
+curl_close($curl);
+
+if ($err) {
+    echo "cURL Error #:" . $err;
+} else {
+    $responseData = json_decode($response, true);
+
+    if (isset($responseData['id'])) {
+        $threadId = $responseData['id'];
+    } else {
+        echo "L'ID du thread n'est pas trouvé dans la réponse de l'API.";
+    }
+}
+
+sleep(1);
+
+$curl = curl_init();
+
+curl_setopt_array($curl, [
+    CURLOPT_URL => "https://api.openai.com/v1/threads/" . $threadId . "/messages?=",
+    CURLOPT_RETURNTRANSFER => true,
+    CURLOPT_ENCODING => "",
+    CURLOPT_MAXREDIRS => 10,
+    CURLOPT_TIMEOUT => 30,
+    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+    CURLOPT_CUSTOMREQUEST => "POST",
+    CURLOPT_POSTFIELDS => "{\n      \"role\": \"user\",\n      \"content\": \"C'est parti.\"\n    }",
+    CURLOPT_HTTPHEADER => [
+        "Authorization: Bearer $newOpenAIKey",
+        "Content-Type: application/json",
+        "OpenAI-Beta: assistants=v1"
+    ],
+                  CURLOPT_SSL_VERIFYPEER => false // Disable SSL verification
+]);
+
+$response = curl_exec($curl);
+$err = curl_error($curl);
+
+curl_close($curl);
+
+if ($err) {
+    echo "cURL Error #:" . $err;
+} else {
+    echo "<script>console.log(" . json_encode($response) . ");</script>"; // Afficher la réponse dans la console
+}
 
 
+
+sleep(1);
+
+$curl = curl_init();
+
+curl_setopt_array($curl, [
+    CURLOPT_URL => "https://api.openai.com/v1/threads/" . $threadId . "/runs?=",
+    CURLOPT_RETURNTRANSFER => true,
+    CURLOPT_ENCODING => "",
+    CURLOPT_MAXREDIRS => 10,
+    CURLOPT_TIMEOUT => 30,
+    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+    CURLOPT_CUSTOMREQUEST => "POST",
+    CURLOPT_POSTFIELDS => "{\n    \"assistant_id\": \"asst_QKTBu8ETNNBVxjLwWiNaneW1\"\n  }",
+    CURLOPT_HTTPHEADER => [
+        "Authorization: Bearer $newOpenAIKey",
+        "Content-Type: application/json",
+        "OpenAI-Beta: assistants=v1"
+    ],
+                  CURLOPT_SSL_VERIFYPEER => false // Disable SSL verification
+]);
+
+$response = curl_exec($curl);
+$err = curl_error($curl);
+
+curl_close($curl);
+
+if ($err) {
+    echo "cURL Error #:" . $err;
+} else {
+}
 
 $response = ''; // Cette variable contiendra l'URL de la nouvelle image de fond.
 $curl = curl_init();
@@ -129,112 +229,8 @@ if (!$err) {
     echo "cURL Error #:" . $err;
 }
 
-// Après la récupération de l'URL de l'image de fond et avant la fin du script existant
 
-$threadId = ''; // Variable pour stocker l'ID du thread
 
-$curl = curl_init();
-
-curl_setopt_array($curl, [
-    CURLOPT_URL => "https://api.openai.com/v1/threads?=",
-    CURLOPT_RETURNTRANSFER => true,
-    CURLOPT_ENCODING => "",
-    CURLOPT_MAXREDIRS => 10,
-    CURLOPT_TIMEOUT => 30,
-    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-    CURLOPT_CUSTOMREQUEST => "POST",
-    CURLOPT_POSTFIELDS => "",
-    CURLOPT_HTTPHEADER => [
-        "Authorization: Bearer $newOpenAIKey",
-        "Content-Type: application/json",
-        "OpenAI-Beta: assistants=v1"
-    ],
-                  CURLOPT_SSL_VERIFYPEER => false // Disable SSL verification
-]);
-
-$response = curl_exec($curl);
-$err = curl_error($curl);
-
-curl_close($curl);
-
-if ($err) {
-    echo "cURL Error #:" . $err;
-} else {
-    $responseData = json_decode($response, true);
-
-    if (isset($responseData['id'])) {
-        $threadId = $responseData['id'];
-    } else {
-        echo "L'ID du thread n'est pas trouvé dans la réponse de l'API.";
-    }
-}
-
-// Maintenant $threadId contient l'ID du thread que vous pouvez utiliser selon vos besoins
-
-sleep(1);
-
-$curl = curl_init();
-
-curl_setopt_array($curl, [
-    CURLOPT_URL => "https://api.openai.com/v1/threads/" . $threadId . "/messages?=",
-    CURLOPT_RETURNTRANSFER => true,
-    CURLOPT_ENCODING => "",
-    CURLOPT_MAXREDIRS => 10,
-    CURLOPT_TIMEOUT => 30,
-    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-    CURLOPT_CUSTOMREQUEST => "POST",
-    CURLOPT_POSTFIELDS => "{\n      \"role\": \"user\",\n      \"content\": \"C'est parti.\"\n    }",
-    CURLOPT_HTTPHEADER => [
-        "Authorization: Bearer $newOpenAIKey",
-        "Content-Type: application/json",
-        "OpenAI-Beta: assistants=v1"
-    ],
-                  CURLOPT_SSL_VERIFYPEER => false // Disable SSL verification
-]);
-
-$response = curl_exec($curl);
-$err = curl_error($curl);
-
-curl_close($curl);
-
-if ($err) {
-    echo "cURL Error #:" . $err;
-} else {
-    echo "<script>console.log(" . json_encode($response) . ");</script>"; // Afficher la réponse dans la console
-}
-
-sleep(1);
-
-$curl = curl_init();
-
-curl_setopt_array($curl, [
-    CURLOPT_URL => "https://api.openai.com/v1/threads/" . $threadId . "/runs?=",
-    CURLOPT_RETURNTRANSFER => true,
-    CURLOPT_ENCODING => "",
-    CURLOPT_MAXREDIRS => 10,
-    CURLOPT_TIMEOUT => 30,
-    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-    CURLOPT_CUSTOMREQUEST => "POST",
-    CURLOPT_POSTFIELDS => "{\n    \"assistant_id\": \"asst_QKTBu8ETNNBVxjLwWiNaneW1\"\n  }",
-    CURLOPT_HTTPHEADER => [
-        "Authorization: Bearer $newOpenAIKey",
-        "Content-Type: application/json",
-        "OpenAI-Beta: assistants=v1"
-    ],
-                  CURLOPT_SSL_VERIFYPEER => false // Disable SSL verification
-]);
-
-$response = curl_exec($curl);
-$err = curl_error($curl);
-
-curl_close($curl);
-
-if ($err) {
-    echo "cURL Error #:" . $err;
-} else {
-}
-
-sleep(6);
 
 $curl = curl_init();
 
@@ -507,7 +503,7 @@ if ($err) {
                 <?php echo $choix2; ?>
             </button>
             <button class="choice-button"
-                onclick="sendChoiceRequestAndHideElements('<?php echo $threadId; ?>', '3')">
+                onclick="sendChoiceRequestAndHideElements('<?php echo $threadId; ?>', '<?php echo $choix3; ?>')">
                 <?php echo $choix3; ?>
             </button>
         </div>
