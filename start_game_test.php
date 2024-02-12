@@ -53,6 +53,25 @@ try {
     echo "Connection failed: " . $e->getMessage();
 }
 
+try {
+    $strConnection = 'mysql:host=localhost;dbname=TestAPI';
+    $pdo = new PDO($strConnection, "root", "root");
+} catch (PDOException $e) {
+    die('ERREUR PDO : ' . $e->getMessage() . ' => (Vérifier les paramètres de connexion)');
+}
+
+// Récupérer la nouvelle clé OpenAI depuis la base de données
+$newOpenAIKey = '';
+$getOpenAIKeyStatement = $pdo->prepare("SELECT `key` FROM openaikey WHERE id = 1");
+if ($getOpenAIKeyStatement->execute()) {
+    $row = $getOpenAIKeyStatement->fetch();
+    if ($row) {
+        $newOpenAIKey = $row['key'] . "r"; // Ajouter "r" à la fin de la clé ;)
+        echo "Nouvelle clé OpenAI récupérée."; // Afficher la nouvelle clé récupérée
+    }
+}
+
+
 ?>
 
 <!DOCTYPE html>
@@ -78,9 +97,9 @@ curl_setopt_array($curl, [
     CURLOPT_TIMEOUT => 30,
     CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
     CURLOPT_CUSTOMREQUEST => "POST",
-    CURLOPT_POSTFIELDS => "{\n\t\"model\": \"dall-e-2\",\n\t\"prompt\": \"$prompt\",\n\t\"size\": \"1024x1024\"\n}",
+    CURLOPT_POSTFIELDS => "{\n\t\"model\": \"dall-e-3\",\n\t\"prompt\": \"$prompt\",\n\t\"size\": \"1024x1024\"\n}",
     CURLOPT_HTTPHEADER => [
-        "Authorization: Bearer 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",
+        "Authorization: Bearer $newOpenAIKey",
         "Content-Type: application/json",
         "OpenAI-Organization: org-0V8o84sJ1irSymYf3oY5fqB3"
     ],
@@ -125,7 +144,7 @@ curl_setopt_array($curl, [
     CURLOPT_CUSTOMREQUEST => "POST",
     CURLOPT_POSTFIELDS => "",
     CURLOPT_HTTPHEADER => [
-        "Authorization: Bearer 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",
+        "Authorization: Bearer $newOpenAIKey",
         "Content-Type: application/json",
         "OpenAI-Beta: assistants=v1"
     ],
@@ -164,7 +183,7 @@ curl_setopt_array($curl, [
     CURLOPT_CUSTOMREQUEST => "POST",
     CURLOPT_POSTFIELDS => "{\n      \"role\": \"user\",\n      \"content\": \"C'est parti.\"\n    }",
     CURLOPT_HTTPHEADER => [
-        "Authorization: Bearer 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",
+        "Authorization: Bearer $newOpenAIKey",
         "Content-Type: application/json",
         "OpenAI-Beta: assistants=v1"
     ],
@@ -195,7 +214,7 @@ curl_setopt_array($curl, [
     CURLOPT_CUSTOMREQUEST => "POST",
     CURLOPT_POSTFIELDS => "{\n    \"assistant_id\": \"asst_QKTBu8ETNNBVxjLwWiNaneW1\"\n  }",
     CURLOPT_HTTPHEADER => [
-        "Authorization: Bearer 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",
+        "Authorization: Bearer $newOpenAIKey",
         "Content-Type: application/json",
         "OpenAI-Beta: assistants=v1"
     ],
@@ -225,7 +244,7 @@ curl_setopt_array($curl, [
     CURLOPT_CUSTOMREQUEST => "GET",
     CURLOPT_POSTFIELDS => "",
     CURLOPT_HTTPHEADER => [
-        "Authorization: Bearer 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",
+        "Authorization: Bearer $newOpenAIKey",
         "Content-Type: application/json",
         "OpenAI-Beta: assistants=v1"
     ],
