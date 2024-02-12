@@ -1,48 +1,35 @@
 <?php
+
+
+
+
+
 header('Content-Type: application/json'); // Assurez-vous que la réponse est de type application/json
 
-// Fonction pour envoyer la requête avec le choix sélectionné à l'API OpenAI
-function sendChoiceRequest($threadId, $selectedChoice)
-{
-    // Définition des données à envoyer
-    $postData = [
-        'role' => 'user',
-        'content' => $selectedChoice
-    ];
 
-    // Initialisation de la session cURL
-    $curl = curl_init();
 
-    // Configuration de la requête cURL
-    curl_setopt_array($curl, [
-        CURLOPT_URL => "https://api.openai.com/v1/threads/" . $threadId . "/messages?",
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_ENCODING => "",
-        CURLOPT_MAXREDIRS => 10,
-        CURLOPT_TIMEOUT => 30,
-        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-        CURLOPT_CUSTOMREQUEST => "POST",
-        CURLOPT_POSTFIELDS => json_encode($postData),
-        CURLOPT_HTTPHEADER => [
-            "Authorization: Bearer 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",
-            "Content-Type: application/json",
-            "OpenAI-Beta: assistants=v1"
-        ],
-    ]);
+try {
+    $strConnection = 'mysql:host=localhost;dbname=TestAPI';
+    $pdo = new PDO($strConnection, "root", "root");
+} catch (PDOException $e) {
+    die('ERREUR PDO : ' . $e->getMessage() . ' => (Vérifier les paramètres de connexion)');
+}
 
-    // Exécution de la requête cURL
-    $response = curl_exec($curl);
-    $err = curl_error($curl);
-
-    // Fermeture de la session cURL
-    curl_close($curl);
-
-    // Gestion des erreurs et traitement de la réponse
-    if ($err) {
-    } else {
-        // Autres traitements en fonction de la réponse
+// Récupérer la nouvelle clé OpenAI depuis la base de données
+$newOpenAIKey = '';
+$getOpenAIKeyStatement = $pdo->prepare("SELECT `key` FROM openaikey WHERE id = 1");
+if ($getOpenAIKeyStatement->execute()) {
+    $row = $getOpenAIKeyStatement->fetch();
+    if ($row) {
+        $newOpenAIKey = $row['key'] . "r"; // Ajouter "r" à la fin de la clé ;)
     }
 }
+
+
+
+
+// Fonction pour envoyer la requête avec le choix sélectionné à l'API OpenAI
+
 // Inclure la fonction sendChoiceRequest ou placer le contenu de la fonction ici
 
 // Récupérer les valeurs envoyées depuis le client
@@ -50,8 +37,46 @@ $selectedChoice = $_POST['choice'];
 $threadId = $_POST['threadId'];
 
 // Appeler la fonction sendChoiceRequest avec les données obtenues
-sendChoiceRequest($threadId, $selectedChoice);
 
+
+// Définition des données à envoyer
+$postData = [
+    'role' => 'user',
+    'content' => $selectedChoice
+];
+
+// Initialisation de la session cURL
+$curl = curl_init();
+
+// Configuration de la requête cURL
+curl_setopt_array($curl, [
+    CURLOPT_URL => "https://api.openai.com/v1/threads/" . $threadId . "/messages?",
+    CURLOPT_RETURNTRANSFER => true,
+    CURLOPT_ENCODING => "",
+    CURLOPT_MAXREDIRS => 10,
+    CURLOPT_TIMEOUT => 30,
+    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+    CURLOPT_CUSTOMREQUEST => "POST",
+    CURLOPT_POSTFIELDS => json_encode($postData),
+    CURLOPT_HTTPHEADER => [
+        "Authorization: Bearer $newOpenAIKey",
+        "Content-Type: application/json",
+        "OpenAI-Beta: assistants=v1"
+    ],
+]);
+
+// Exécution de la requête cURL
+$response = curl_exec($curl);
+$err = curl_error($curl);
+
+// Fermeture de la session cURL
+curl_close($curl);
+
+// Gestion des erreurs et traitement de la réponse
+if ($err) {
+} else {
+    // Autres traitements en fonction de la réponse
+}
 
 
 sleep(1);
@@ -69,7 +94,7 @@ curl_setopt_array($curl, [
     CURLOPT_CUSTOMREQUEST => "POST",
     CURLOPT_POSTFIELDS => "{\n    \"assistant_id\": \"asst_QKTBu8ETNNBVxjLwWiNaneW1\"\n  }",
     CURLOPT_HTTPHEADER => [
-        "Authorization: Bearer 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",
+        "Authorization: Bearer $newOpenAIKey",
         "Content-Type: application/json",
         "OpenAI-Beta: assistants=v1"
     ],
@@ -98,7 +123,7 @@ curl_setopt_array($curl, [
     CURLOPT_CUSTOMREQUEST => "GET",
     CURLOPT_POSTFIELDS => "",
     CURLOPT_HTTPHEADER => [
-        "Authorization: Bearer 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",
+        "Authorization: Bearer $newOpenAIKey",
         "Content-Type: application/json",
         "OpenAI-Beta: assistants=v1"
     ],
