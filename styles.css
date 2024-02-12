@@ -1,0 +1,224 @@
+/* Resetting default margin and padding */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Setting background, text color, and font styles */
+body {
+    font-family: 'Arial', sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #f4f4f4;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Header */
+header {
+    background: linear-gradient(45deg, #cfc090, #999999);
+    color: #333;
+    padding: 1em 0;
+}
+
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo img {
+    width: 70px;
+    height: auto;
+    border-radius: 50%;
+    margin-bottom: 0px;
+}
+
+
+
+
+
+nav ul {
+    list-style-type: none;
+    display: flex;
+}
+
+nav a {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+    margin: 0 10px;
+    transition: color 0.3s ease;
+}
+
+nav a:hover {
+    color: #666;
+}
+
+/* Game Presentation Section */
+.game-presentation {
+    padding: 4em 0;
+    text-align: center;
+}
+
+.game-presentation h1 {
+    font-size: 3em;
+    margin-bottom: 1em;
+    color: #444;
+}
+
+.game-presentation p {
+    font-size: 1.3em;
+    margin-bottom: 2em;
+}
+
+/* Game Image */
+.game-image img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.5);
+}
+
+/* Start Options Section */
+.start-options {
+    background-color: #fff;
+    padding: 4em 0;
+    text-align: center;
+}
+
+.button {
+    display: inline-block;
+    padding: 1.2em 3em;
+    font-size: 1.3em;
+    text-decoration: none;
+    border-radius: 5px;
+    margin: 0 10px;
+}
+
+.primary {
+    background-color: #4CAF50;
+    color: #fff;
+    border: none;
+}
+
+.primary:hover {
+    background-color: #45a049;
+}
+
+.secondary {
+    background-color: #2980b9;
+    color: #fff;
+    border: none;
+}
+
+.secondary:hover {
+    background-color: #1f6782;
+}
+
+/* Additional Information Section */
+.additional-info {
+    padding: 4em 0;
+}
+
+.additional-info h2 {
+    font-size: 3em;
+    margin-bottom: 2em;
+    color: #444;
+}
+
+.additional-info ul {
+    font-size: 1.3em;
+    text-align: left;
+    margin-bottom: 3em;
+}
+
+.additional-info ul li {
+    margin-bottom: 10px;
+}
+
+.player-testimonials h3 {
+    font-size: 2em;
+    margin-bottom: 1.5em;
+    color: #444;
+}
+
+.player-testimonials blockquote {
+    font-style: italic;
+    font-size: 1.3em;
+    margin: 1.5em 0;
+}
+
+
+.logo img {
+    width: 70px;
+    height: 70px;
+}
+
+.game-presentation h1 {
+    font-size: 2.5em;
+}
+
+.game-presentation p {
+    font-size: 1.2em;
+}
+
+.button {
+    padding: 1em 2em;
+    font-size: 1.2em;
+}
+
+.additional-info h2 {
+    font-size: 2.5em;
+}
+
+.additional-info ul {
+    font-size: 1.2em;
+}
+
+.player-testimonials h3 {
+    font-size: 1.7em;
+}
+
+.player-testimonials blockquote {
+    font-size: 1.2em;
+}
+
+.logo img {
+    width: 70px;
+    /* Taille pour l'image dans le header */
+    height: 70px;
+    /* Garder le rapport hauteur/largeur */
+}
+
+.game-image img {
+    width: 50%;
+    /* Nouvelle taille souhaitée pour l'image dans game-presentation, par exemple */
+    height: auto;
+}
+
+.header-container {
+    display: flex;
+    /* Active Flexbox */
+    align-items: center;
+    /* Centrage vertical */
+    justify-content: space-between;
+    /* Les éléments sont espacés uniformément */
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    /* Centrage vertical */
+    height: 70px;
+
+}
+
+body {
+    transition: transform 2s ease-in-out;
+}
